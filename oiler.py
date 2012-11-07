@@ -46,14 +46,14 @@ def send(type, msg, irc):
 	elif (type == "IDENT"):
 		irc.send("PRIVMSG NICKSERV :identify" + str(msg) + "\r\n")
 	else:
-		irc.send("PRIVMSG " + chan + " :" + str(msg) + "\r\n")
+		irc.send("NOTICE " + chan + " :" + str(msg) + "\r\n")
 
 # sende normale channelnachricht
 def sendpriv(line, msg, irc):
 	if (isQuery(line) == True):
-		irc.send("PRIVMSG " + getName(line) + " :" + str(msg) + "\r\n")
+		irc.send("NOTICE " + getName(line) + " :" + str(msg) + "\r\n")
 	else:
-		irc.send("PRIVMSG " + getChannel(line) + " :" + str(msg) + "\r\n")
+		irc.send("NOTICE " + getChannel(line) + " :" + str(msg) + "\r\n")
 
 
 def checkQueryPW(line, position = 6):
@@ -361,7 +361,7 @@ def cmd(command, line):
 				send("PART", str(line[4]), irc)		
 		elif (command == "!say"):
 			if (checkQueryPW(line, 4) == True):
-				irc.send("PRIVMSG " + str(line[5]) + " :" + ' '.join(line[6:]) + "\r\n")
+				irc.send("NOTICE " + str(line[5]) + " :" + ' '.join(line[6:]) + "\r\n")
 
 		elif (command == "!time"):
 			now = datetime.datetime.now()
@@ -459,7 +459,7 @@ def twitterLurk():
 		mentions = api.mentions();
 		for status in mentions:
 			if (status.created_at > datetime.datetime.utcnow()-datetime.timedelta(minutes=1)):
-				irc.send("PRIVMSG " + chan + " :" + "Tweet von " + str("@" + status.author.screen_name) + ": " + str(status.text) + "\r\n")
+				irc.send("NOTICE " + chan + " :" + "Tweet von " + str("@" + status.author.screen_name) + ": " + str(status.text) + "\r\n")
 
 t = threading.Thread(target=twitterLurk)
 t.daemon = True
